@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
+
 import type { Product } from '../types/Product';
-import { getProducts, deleteProduct } from '../services/api';
+
+import {
+    getProducts,
+    deleteProduct
+} from '../services/api';
 
 function Products() {
     const [products, setProducts] = useState<Product[]>([]);
 
     async function loadProducts() {
-        try {
-            const data = await getProducts();
-            setProducts(data);
-        } catch (error) {
-            console.error(error);
-        }
+        const data = await getProducts();
+        setProducts(data);
     }
 
     async function handleDelete(id: number) {
         await deleteProduct(id);
+
         loadProducts();
     }
 
@@ -24,31 +27,60 @@ function Products() {
     }, []);
 
     return (
-        <div>
-            <h1>Produtos</h1>
+        <div className="max-w-5xl mx-auto p-6">
 
-            <table>
+            {/* HEADER */}
+            <div className="flex items-center justify-between mb-6">
+                <h1 className="text-3xl font-bold">
+                    Produtos
+                </h1>
+
+                <Link
+                    to="/products/create"
+                    className="bg-black text-white px-4 py-2 rounded"
+                >
+                    Novo Produto
+                </Link>
+            </div>
+
+            {/* TABELA */}
+            <table className="w-full border">
                 <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>SKU</th>
-                        <th>Quantidade</th>
-                        <th>Preço</th>
-                        <th></th>
+                    <tr className="bg-gray-100">
+                        <th className="p-3 text-left">Nome</th>
+                        <th className="p-3 text-left">SKU</th>
+                        <th className="p-3 text-left">Quantidade</th>
+                        <th className="p-3 text-left">Preço</th>
+                        <th className="p-3 text-left"></th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {products.map(product => (
-                        <tr key={product.id}>
-                            <td>{product.name}</td>
-                            <td>{product.sku}</td>
-                            <td>{product.quantity}</td>
-                            <td>{product.price}</td>
+                        <tr
+                            key={product.id}
+                            className="border-t"
+                        >
+                            <td className="p-3">
+                                {product.name}
+                            </td>
 
-                            <td>
+                            <td className="p-3">
+                                {product.sku}
+                            </td>
+
+                            <td className="p-3">
+                                {product.quantity}
+                            </td>
+
+                            <td className="p-3">
+                                R$ {product.price}
+                            </td>
+
+                            <td className="p-3">
                                 <button
                                     onClick={() => handleDelete(product.id)}
+                                    className="bg-red-500 text-white px-3 py-1 rounded"
                                 >
                                     Excluir
                                 </button>
