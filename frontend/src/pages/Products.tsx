@@ -78,12 +78,21 @@ function Products() {
                             </td>
 
                             <td className="p-3">
-                                <button
-                                    onClick={() => handleDelete(product.id)}
-                                    className="bg-red-500 text-white px-3 py-1 rounded"
-                                >
-                                    Excluir
-                                </button>
+                                <div className="flex gap-2">
+                                    <Link 
+                                        to={`/products/${product.id}/edit`} 
+                                        className="bg-blue-500 text-white px-3 py-1 rounded"
+                                    >
+                                        Editar
+                                    </Link>
+                                     
+                                    <button
+                                        onClick={() => handleDelete(product.id)}
+                                        className="bg-red-500 text-white px-3 py-1 rounded"
+                                    >
+                                        Excluir
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}

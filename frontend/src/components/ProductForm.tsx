@@ -1,8 +1,13 @@
 import { useState } from "react";
 
+import type {
+    Product,
+    ProductFormData
+} from "../types/Product"
+
 interface Props {
-    onSubmit: (data: any) => Promise<void>;
-    initialValues?: any;
+    onSubmit: (data: ProductFormData) => Promise<void>;
+    initialValues?: Product;
 }
 
 function ProductForm({ onSubmit, initialValues }: Props) {
@@ -11,7 +16,7 @@ function ProductForm({ onSubmit, initialValues }: Props) {
     const [quantity, setQuantity] = useState(initialValues?.quantity || 0);
     const [price, setPrice] = useState(initialValues?.price || 0);
 
-    async function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
 
         await onSubmit({

@@ -1,16 +1,23 @@
+import type {
+    Product,
+    ProductFormData
+} from "../types/Product";
+
 const API_URL = 'http://localhost:8000/api';
 
-export async function getProducts() {
+export async function getProducts(): Promise<Product[]> {
     const response = await fetch(`${API_URL}/products`);
     return response.json();
 }
 
-export async function getProduct(id: string) {
+export async function getProduct(id: string): Promise<Product> {
     const response = await fetch(`${API_URL}/products/${id}`);
     return response.json();
 }
 
-export async function createProduct(data: unknown) {
+export async function createProduct(
+    data: ProductFormData
+): Promise<Product> {
     const response = await fetch(`${API_URL}/products`, {
         method: 'POST',
         headers: {
@@ -22,7 +29,10 @@ export async function createProduct(data: unknown) {
     return response.json();
 }
 
-export async function updateProduct(id: string, data: unknown) {
+export async function updateProduct(
+    id: string,
+    data: ProductFormData
+): Promise<Product> {
     const response = await fetch(`${API_URL}/products/${id}`, {
         method: 'PUT',
         headers: {
