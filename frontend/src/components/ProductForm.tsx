@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import toast from "react-hot-toast";
+
 import type {
     Product,
     ProductFormData
@@ -16,15 +18,50 @@ function ProductForm({ onSubmit, initialValues }: Props) {
     const [quantity, setQuantity] = useState(initialValues?.quantity || 0);
     const [price, setPrice] = useState(initialValues?.price || 0);
 
+    const [loading, setLoading] = useState(false);
+
     async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
 
-        await onSubmit({
-            name,
-            sku,
-            quantity,
-            price
-        });
+        if(!name.trim()) {
+            toast.error('Nome é obrigatório');
+            return;
+        }
+
+        if(!sku.trim()) {
+            toast.error('SKU é obrigatório');
+            return;
+        }
+
+        if(quantity < 0){
+            toast.error('Quantidade inválida');
+            return;
+        }
+
+        if(price < 0){
+            toast.error('Preço inválida');
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            await onSubmit({
+                name,
+                sku,
+                quantity,
+                price
+            });
+
+            toast.success('Produto salvo com sucesso');
+        } catch (error) {
+            console.error(error);
+
+            toast.error('Erro ao salvar produto')
+
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -65,8 +102,17 @@ function ProductForm({ onSubmit, initialValues }: Props) {
                 className="w-full border p-3 rounded"
             />
 
-            <button className="bg-black text-white px-4 py-2 rounded">
-                Salvar
+            <button 
+                disabled={loading}
+                className="
+                    bg-black 
+                    text-white 
+                    px-4
+                    py-2
+                    rounded
+                "
+            >
+                {loading ? 'Salvando...' : 'Salvar'}
             </button>
         </form>
     );
