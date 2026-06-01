@@ -11,10 +11,31 @@ import {
 
 function Products() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
+    const [search, setSearch] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [total, setTotal] = useState(0);
 
     async function loadProducts() {
-        const data = await getProducts();
-        setProducts(data);
+        try {
+
+            setLoading(true);
+
+            const response = await getProducts(
+                search,
+                page
+            );
+
+            setProducts(response.data);
+            setLastPage(response.last_page);
+            setTotal(response.total);
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     async function handleDelete(id: number) {
@@ -42,8 +63,14 @@ function Products() {
     }
 
     useEffect(() => {
-        loadProducts();
-    }, []);
+
+        const delay = setTimeout(() => {
+            loadProducts();
+        }, 300);
+
+        return () => clearTimeout(delay);
+
+    }, [search, page]);
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -63,8 +90,46 @@ function Products() {
                     </Link>
                 </div>
 
+                {/* BUSCA */}
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Buscar produto..."
+                        value={search}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setPage(1);
+                        }}
+                        className="
+                            w-full
+                            border
+                            p-3
+                            rounded
+                            bg-white
+                        "
+                    />
+                </div>
+
+                {/* INFO */}
+                <div className="flex justify-between items-center mb-4">
+                    <p className="text-sm text-gray-500">
+                        Total: {total} produtos
+                    </p>
+
+                    <p className="text-sm text-gray-500">
+                        Página {page} de {lastPage}
+                    </p>
+                </div>
+
+                {/* LOADING */}
+                {loading && (
+                    <p className="mb-4 text-gray-500">
+                        Carregando produtos...
+                    </p>
+                )}
+
+                {/* TABELA */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
-                    {/* TABELA */}
                     <table className="w-full">
                         <thead>
                             <tr className="bg-gray-100">
@@ -122,6 +187,35 @@ function Products() {
                             ))}
                         </tbody>
                     </table>
+                </div>
+
+                {/* PAGINAÇÃO */}
+                <div className="flex justify-center gap-2 mt-6">
+                    <button
+                        disabled={page === 1}
+                        onClick={() => setPage(page - 1)}
+                        className="
+                            px-4 py-2 border rounded
+                            disabled:opacity-50
+                        "
+                    >
+                        Anterior
+                    </button>
+
+                    <span className="px-4 py-2">
+                        Página {page} de {lastPage}
+                    </span>
+
+                    <button
+                        disabled={page === lastPage}
+                        onClick={() => setPage(page + 1)}
+                        className="
+                            px-4 py-2 border rounded
+                            disabled:opacity-50
+                        "
+                    >
+                        Próxima
+                    </button>
                 </div>
             </div>
         </div>

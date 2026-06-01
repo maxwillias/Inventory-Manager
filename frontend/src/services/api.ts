@@ -3,10 +3,18 @@ import type {
     ProductFormData
 } from "../types/Product";
 
+import type { PaginatedResponse } from "../types/PaginatedResponse";
+
 const API_URL = 'http://localhost:8000/api';
 
-export async function getProducts(): Promise<Product[]> {
-    const response = await fetch(`${API_URL}/products`);
+export async function getProducts(
+    search = '',
+    page = 1 
+): Promise<PaginatedResponse<Product>> {
+    const response = await fetch(
+        `${API_URL}/products?search=${search}&page=${page}`
+    );
+    
     return response.json();
 }
 

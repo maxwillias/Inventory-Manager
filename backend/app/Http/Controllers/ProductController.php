@@ -10,9 +10,26 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Product::latest()->get();
+        $products = Product::query();
+
+        if ($request->filled('search')) {
+
+            $search = $request->search;
+
+            $products->where(function ($query) use ($search) {
+
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%");
+
+            });
+        }
+
+        return $products
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
     }
 
     /**
