@@ -6,6 +6,8 @@ import type {
     Product,
     ProductFormData
 } from "../types/Product"
+import Input from "./Input";
+import Button from "./Button";
 
 interface Props {
     onSubmit: (data: ProductFormData) => Promise<void>;
@@ -65,56 +67,53 @@ function ProductForm({ onSubmit, initialValues }: Props) {
     }
 
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="max-w-xl mx-auto p-6 space-y-4"
-        >
-            <input
-                type="text"
-                placeholder="Nome"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                className="w-full border p-3 rounded"
-            />
-
-            <input
-                type="text"
-                placeholder="SKU"
-                value={sku}
-                onChange={e => setSku(e.target.value)}
-                className="w-full border p-3 rounded"
-            />
-
-            <input
-                type="number"
-                placeholder="Quantidade"
-                value={quantity}
-                onChange={e => setQuantity(Number(e.target.value))}
-                className="w-full border p-3 rounded"
-            />
-
-            <input
-                type="number"
-                step="0.01"
-                placeholder="Preço"
-                value={price}
-                onChange={e => setPrice(Number(e.target.value))}
-                className="w-full border p-3 rounded"
-            />
-
-            <button 
-                disabled={loading}
-                className="
-                    bg-black 
-                    text-white 
-                    px-4
-                    py-2
-                    rounded
-                "
+        <div className="
+            max-w-xl
+            mx-auto
+            bg-white
+            rounded-xl
+            shadow-sm
+            border
+            p-6
+        ">
+            <form
+                onSubmit={handleSubmit}
+                className="max-w-xl mx-auto p-6 space-y-4"
             >
-                {loading ? 'Salvando...' : 'Salvar'}
-            </button>
-        </form>
+                <Input
+                    type="text"
+                    placeholder="Nome"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                />
+
+                <Input
+                    type="text"
+                    placeholder="SKU"
+                    value={sku}
+                    onChange={e => setSku(e.target.value)}
+                />
+
+                <Input
+                    type="number"
+                    placeholder="Quantidade"
+                    value={quantity}
+                    onChange={e => setQuantity(Number(e.target.value))}
+                />
+
+                <Input
+                    type="number"
+                    step="0.01"
+                    placeholder="Preço"
+                    value={price}
+                    onChange={e => setPrice(Number(e.target.value))}
+                />
+
+                <Button disabled={loading}>
+                    {loading ? 'Salvando...' : 'Salvar'}
+                </Button>
+            </form>
+        </div>
     );
 }
 

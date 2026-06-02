@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { toast } from 'react-hot-toast';
 
 import type { Product } from '../types/Product';
+import Layout from '../components/Layout';
 
 import {
     getProducts,
@@ -73,18 +74,24 @@ function Products() {
     }, [search, page]);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <Layout>
             <div className="max-w-5xl mx-auto p-6">
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-3xl font-bold">
-                        Produtos
-                    </h1>
+                    <div>
+                        <h1 className="text-3xl font-bold">
+                            Produtos
+                        </h1>
+
+                        <p className="text-gray-500">
+                            Gerencie seu estoque
+                        </p>
+                    </div>
 
                     <Link
                         to="/products/create"
-                        className="bg-black text-white px-4 py-2 rounded"
+                        className="bg-slate-900 text-white px-5 py-2 rounded-lg houver:bg-slate-800"
                     >
                         Novo Produto
                     </Link>
@@ -103,9 +110,13 @@ function Products() {
                         className="
                             w-full
                             border
+                            border-gray-200
                             p-3
-                            rounded
+                            rounded-lg
                             bg-white
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-slate-900
                         "
                     />
                 </div>
@@ -128,11 +139,32 @@ function Products() {
                     </p>
                 )}
 
+                {/* CARDS */}
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                    <div
+                        className="
+                            bg-white
+                            rounded-xl
+                            p-5
+                            shadow-sm
+                            border
+                        "
+                    >
+                        <p className="text-gray-500">
+                            Produtos
+                        </p>
+
+                        <h2 className="text-3xl font-bold">
+                            {total}
+                        </h2>
+                    </div>
+                </div>
+
                 {/* TABELA */}
-                <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <table className="w-full">
                         <thead>
-                            <tr className="bg-gray-100">
+                            <tr className="bg-slate-50">
                                 <th className="p-3 text-left">Nome</th>
                                 <th className="p-3 text-left">SKU</th>
                                 <th className="p-3 text-left">Quantidade</th>
@@ -145,7 +177,7 @@ function Products() {
                             {products.map(product => (
                                 <tr
                                     key={product.id}
-                                    className="border-t"
+                                    className="border-t houver:bg-slate-50 transition"
                                 >
                                     <td className="p-3">
                                         {product.name}
@@ -218,7 +250,7 @@ function Products() {
                     </button>
                 </div>
             </div>
-        </div>
+        </Layout>
     );
 }
 

@@ -16,6 +16,7 @@ import type {
     Product,
     ProductFormData
 } from "../types/Product";
+import Layout from "../components/Layout";
 
 function EditProduct() {
     const { id } = useParams();
@@ -53,7 +54,7 @@ function EditProduct() {
     }
 
     return (
-        <div>
+        <Layout>
             <h1 className="text-3xl text-center mt-10">
                 Editar Produto
             </h1>
@@ -62,7 +63,7 @@ function EditProduct() {
                 onSubmit={handleUpdate}
                 initialValues={product}
             />
-        </div>
+        </Layout>
     );
 }
 
